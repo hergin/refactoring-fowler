@@ -86,3 +86,34 @@ var plays = {
 };
 
 document.write(statement(invoices[0],plays));
+
+// Tests
+mocha.setup("bdd");
+var assert = chai.assert;
+
+describe("Refactoring", function() {
+  it("has provided plays to BigCo", function() {
+    var expected =
+      "Statement for BigCo\n" +
+      "  Hamlet: $650.00 (55 seats)\n" +
+      "  As You Like It: $580.00 (35 seats)\n" +
+      "  Othello: $500.00 (40 seats)\n" +
+      "Amount owed is $1,730.00\n" +
+      "You earned 47 credits\n";
+    var actual = statement(invoices[0], plays);
+    assert.equal(expected, actual);
+  });
+
+  it("has provided plays to SmallCo", function() {
+    var expected =
+      "Statement for SmallCo\n" +
+      "  Hamlet: $400.00 (10 seats)\n" +
+      "  Othello: $400.00 (5 seats)\n" +
+      "Amount owed is $800.00\n" +
+      "You earned 0 credits\n";
+    var actual = statement(invoices[1], plays);
+    assert.equal(expected, actual);
+  });
+});
+
+mocha.run();
