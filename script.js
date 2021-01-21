@@ -2,6 +2,31 @@ function statement(invoice, plays) {
   return renderPlainText(createStatementData(invoice, plays));
 }
 
+function statementHtml(invoice, plays) {
+  return renderHtmlText(createStatementData(invoice, plays));
+}
+
+function renderHtmlText(data) {
+  let result = `<h1>Statement for ${data.customer}</h1><br/>`;
+  result+= `<table><tr><th>play</th><th>seats</th><th>cost</th></tr>`
+  for (let perf of data.performances) {
+    result += `<tr><td>${perf.play.name}</td><td>${perf.audience}</td><td>${usd(perf.amount)}</td></tr>`;
+  }
+  result += `</table><br/>`
+  result += `<p>Amount owed is <em>${usd(data.totalAmount)}</em></p><br/>`;
+
+  result += `<p>You earned <em>${data.totalVolumeCredits}</em> credits</p>`;
+  return result;  
+}
+
+function usd(aNumber) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2
+  }).format(aNumber/100);
+}
+
 function createStatementData(invoice, plays) {
   const statementData = {};
   statementData.customer = invoice.customer;
@@ -87,15 +112,6 @@ function renderPlainText(data) {
   result += `You earned ${data.totalVolumeCredits} credits\n`;
 
   return result;
-
-  function usd(aNumber) {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      minimumFractionDigits: 2
-    }).format(aNumber/100);
-  }
-
 }
 
 var invoices = [
@@ -138,6 +154,7 @@ var plays = {
 };
 
 document.write(statement(invoices[0],plays));
+document.write(statementHtml(invoices[0],plays));
 
 // Tests
 mocha.setup("bdd");
