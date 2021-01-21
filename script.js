@@ -3,13 +3,11 @@ function statement(invoice, plays) {
     
   let totalAmount = 0;
   for (let perf of invoice.performances) {
-    let thisAmount = amountFor(perf);
-    
     // print line for this order
-    result += `  ${playFor(perf).name}: ${usd(thisAmount)} (${
+    result += `  ${playFor(perf).name}: ${usd(amountFor(perf))} (${
       perf.audience
     } seats)\n`;
-    totalAmount += thisAmount;
+    totalAmount += amountFor(perf);
   }
   result += `Amount owed is ${usd(totalAmount)}\n`;
 
